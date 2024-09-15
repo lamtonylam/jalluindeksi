@@ -1,0 +1,4 @@
+.env
+__pycache__
+cache_name.sqlite
+venv
