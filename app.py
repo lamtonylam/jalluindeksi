@@ -17,7 +17,7 @@ api_key = os.getenv("api_key")
 # Set the proxy parameters
 proxy_params = {
     "api_key": api_key,
-    "url": "https://www.alko.fi/tuotteet/101486/Jaloviina-muovipullo/",
+    "url": "https://www.alko.fi/tuotteet/000706/Jaloviina-/",
 }
 
 # request cache to not call api all the time, expires after 1 hour
@@ -38,6 +38,7 @@ price_container = soup.find(
 )
 # get aria label using slice
 hinta = str(price_container)[18:23]
+hinta.replace(".", ",")
 
 
 @app.route("/")
