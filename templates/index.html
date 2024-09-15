@@ -17,31 +17,33 @@
         ></script>
     </head>
     <body>
-        <h1>Jallun hinta on tällä hetkellä:</h1>
-        <h1>{{hinta}} euroa</h1>
+        <div style="margin-left: 40px; margin-top:20px">
+            <h1>Jallun hinta on tällä hetkellä:</h1>
+            <h1>{{hinta}} euroa</h1>
 
-        <br />
-        <h3>Historiallinen data</h3>
-        <p>
-            Tietokantaan kirjataan jallun hinta korkeintaan kerran päivässä, kun
-            sivustolla vieraillaan
-        </p>
-        <table class="table">
-            <tr>
-                {% for key, value in prices.0.items() %}
-                <th>{{ key }}</th>
+            <br />
+            <h3>Historiallinen data</h3>
+            <p>
+                Tietokantaan kirjataan jallun hinta korkeintaan kerran päivässä,
+                kun sivustolla vieraillaan
+            </p>
+            <table class="table">
+                <tr>
+                    {% for key, value in prices.0.items() %}
+                    <th>{{ key }}</th>
+                    {% endfor %}
+                </tr>
+                {% for dict_item in prices %}
+                <tr>
+                    {% for key, value in dict_item.items() %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            </tr>
-            {% for dict_item in prices %}
-            <tr>
-                {% for key, value in dict_item.items() %}
-                <td>{{ value }}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </table>
+            </table>
 
-        <br />
-        <a href="https://www.cs.helsinki.fi/u/tonylam/">tony lam</a>
+            <br />
+            <a href="https://www.cs.helsinki.fi/u/tonylam/">tony lam</a>
+        </div>
     </body>
 </html>
