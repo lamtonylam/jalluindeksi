@@ -24,7 +24,7 @@ def get_all_clean():
 
         date = datetime.datetime.strptime(i["created_at"], "%Y-%m-%dT%H:%M:%S.%f%z")
         price_dict = {
-            "hinta": i["hinta"],
+            "hinta": f'{i["hinta"]} €',
             "kirjattu tietokantaan": date.strftime("%Y/%m/%d, %H:%M"),
         }
         list_of_prices.append(price_dict)
