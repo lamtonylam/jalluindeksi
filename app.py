@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import os
 
+import database
+
 app = Flask(__name__)
 
 load_dotenv()
@@ -43,4 +45,6 @@ hinta.replace(".", ",")
 
 @app.route("/")
 def hello_world():
-    return render_template("index.html", hinta=hinta)
+    database.insert_price(hinta)
+    prices = database.get_all_clean()
+    return render_template("index.html", hinta=hinta, prices=prices)

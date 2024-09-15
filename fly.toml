@@ -18,3 +18,6 @@ primary_region = 'arn'
 
 [[vm]]
   size = 'shared-cpu-1x'
+
+[env]
+TZ="Europe/Helsinki"
