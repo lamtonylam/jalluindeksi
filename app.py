@@ -40,8 +40,7 @@ price_container = soup.find(
 )
 # get aria label using slice
 hinta = str(price_container)[18:23]
-hinta.replace(".", ",")
-
+hinta = float(hinta)
 
 @app.route("/")
 def hello_world():
