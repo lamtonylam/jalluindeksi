@@ -17,15 +17,22 @@
         ></script>
     </head>
     <body>
-        <div style="margin-left: 40px; margin-top: 20px; margin-right: 40px">
+        <div
+            style="
+                margin-left: 40px;
+                margin-top: 20px;
+                margin-right: 40px;
+                margin-bottom: 50px;
+            "
+        >
             <h1>Jalluindeksi on tällä hetkellä:</h1>
             <h1>{{hinta}} euroa</h1>
 
             <br />
             <h3>Historiallinen data</h3>
             <p>
-                Tietokantaan kirjataan jallun hinta korkeintaan kerran päivässä,
-                kun sivustolla vieraillaan
+                Tietokantaan kirjataan jallun hinta, kun sen hinta on muuttunut
+                edellisestä tietokantamerkinnästä.
             </p>
             <table class="table">
                 <tr>
@@ -41,6 +48,8 @@
                 </tr>
                 {% endfor %}
             </table>
+
+            <img src="/graph" alt="Historical Data Graph" class="img-fluid" />
 
             <br />
             <h4>Ai siis mikä ihmeen jalluindeksi?</h4>

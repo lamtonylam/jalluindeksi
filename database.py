@@ -37,17 +37,13 @@ def insert_price(price):
     all_entries = get_all()
     # if true, that means that there are entries, check if entry to be added is same as last
     if all_entries:
-        last_entry = datetime.datetime.strptime(
-            all_entries[-1]["created_at"], "%Y-%m-%dT%H:%M:%S.%f%z"
-        )
-        # add 3 hours because the database is in UTC 0
-        last_entry = last_entry + timedelta(hours=3)
-        last_entry_date = last_entry.date()
-
-        today_date = datetime.datetime.now().date()
-
-        # if last entry and todays date is not the same.
-        if last_entry_date != today_date:
+        last_entry = all_entries[-1]
+        last_price = last_entry["hinta"]
+        # if the price is the same as the last one, do not add it to the database
+        if price == last_price:
+            return
+        # if the price is different, add it to the database
+        else:
             response = supabase.table("jalluindex").insert({"hinta": price}).execute()
     # if it is false, it means that the database is empty, so put a new entry in.
     else:
