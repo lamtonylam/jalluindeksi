@@ -30,31 +30,33 @@ proxy_params = {
     "url": "https://www.alko.fi/tuotteet/000706/Jaloviina-/",
 }
 
-# request cache to not call api all the time, expires after 1 hour
-requests_cache.install_cache("cache_name", expire_after=43200)
 
-# get request
-response = requests.get(
-    url="https://proxy.scrapeops.io/v1/",
-    params=urlencode(proxy_params),
-    timeout=120,
-)
+def fetch_price():
+    # request cache to not call api all the time, expires after 3 hours
+    requests_cache.install_cache("cache_name", expire_after=10800)
 
-# use beautifulsoup to parse raw html
-soup = BeautifulSoup(response.content, "html.parser")
-# find class that houses the price
-price_container = soup.find(
-    class_="js-price-container price-wrapper price module-price"
-)
-# get aria label using slice
-hinta = str(price_container)[18:23]
-hinta = float(hinta)
+    # get request
+    response = requests.get(
+        url="https://proxy.scrapeops.io/v1/",
+        params=urlencode(proxy_params),
+        timeout=120,
+    )
+
+    # use beautifulsoup to parse raw html
+    soup = BeautifulSoup(response.content, "html.parser")
+    # find class that houses the price
+    price_container = soup.find(
+        class_="js-price-container price-wrapper price module-price"
+    )
+    # get aria label using slice
+    hinta = str(price_container)[18:23]
+    hinta = float(hinta)
+    return hinta
 
 
-# run price check every 12 hours
-@scheduler.task("interval", id="do_job_1", seconds=43200, misfire_grace_time=900)
-# function to check price daily and insert into database if changed
+@scheduler.task("interval", id="do_job_1", seconds=60, misfire_grace_time=900)
 def price_check_daily():
+    hinta = fetch_price()
     database.insert_price(hinta)
     print("checked price")
 
@@ -65,6 +67,7 @@ scheduler.start()
 @app.route("/")
 def hello_world():
     prices = database.get_all_clean()
+    hinta = fetch_price()
     return render_template("index.html", hinta=hinta, prices=prices)
 
 
