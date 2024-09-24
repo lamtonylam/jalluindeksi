@@ -15,6 +15,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import database
 
 from flask_apscheduler import APScheduler
+from datetime import datetime
 
 app = Flask(__name__)
 scheduler = APScheduler()
@@ -42,6 +43,12 @@ def fetch_price():
         timeout=120,
     )
 
+    # Check if the response was served from the cache
+    if response.from_cache:
+        print("Response served from cache")
+    else:
+        print("Real request made")
+
     # use beautifulsoup to parse raw html
     soup = BeautifulSoup(response.content, "html.parser")
     # find class that houses the price
@@ -58,7 +65,8 @@ def fetch_price():
 def price_check_daily():
     hinta = fetch_price()
     database.insert_price(hinta)
-    print("checked price")
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"Checked price at {current_time}")
 
 
 scheduler.start()
