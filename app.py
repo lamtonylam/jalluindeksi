@@ -1,6 +1,4 @@
-from flask import Flask
-from flask import Response
-from flask import render_template
+from flask import Flask, Response, render_template
 import requests
 import requests_cache
 from urllib.parse import urlencode
@@ -8,12 +6,10 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import os
 import io
-
-# matplot
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib import rcParams
 import database
-
 from flask_apscheduler import APScheduler
 from datetime import datetime
 
@@ -74,7 +70,7 @@ scheduler.start()
 
 @app.route("/")
 def hello_world():
-    prices = database.get_all_clean()
+    prices = database.get_all_clean(eurosign=True)
     hinta = fetch_price()
     return render_template("index.html", hinta=hinta, prices=prices)
 
@@ -84,8 +80,16 @@ def create_figure():
     ax = fig.subplots()
     prices_data = database.get_all_clean()
     prices = [item["hinta"] for item in prices_data]
+    prices = [float(item) for item in prices]
     dates = [item["kirjattu tietokantaan"][0:11] for item in prices_data]
     ax.plot(dates, prices)
+
+    ax.yaxis.set_major_formatter("{x:1.2f} €")
+    
+    ax.scatter(dates, prices, color='red', marker='x')
+
+    rcParams["axes.autolimit_mode"] = "round_numbers"
+
     return fig
 
 

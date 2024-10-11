@@ -13,7 +13,7 @@ def get_all():
     return list(response.data)
 
 
-def get_all_clean():
+def get_all_clean(eurosign: bool = False):
     response = (
         supabase.table("jalluindex").select("hinta, created_at").limit(20).execute()
     )
@@ -23,10 +23,17 @@ def get_all_clean():
     for i in response.data:
 
         date = datetime.datetime.strptime(i["created_at"], "%Y-%m-%dT%H:%M:%S.%f%z")
-        price_dict = {
-            "hinta": f'{i["hinta"]} €',
-            "kirjattu tietokantaan": date.strftime("%Y/%m/%d, %H:%M"),
-        }
+        # if eurosign is true, add euro sign to the price
+        if eurosign:
+            price_dict = {
+                "hinta": f'{i["hinta"]} €',
+                "kirjattu tietokantaan": date.strftime("%Y/%m/%d, %H:%M"),
+            }
+        else:
+            price_dict = {
+                "hinta": f'{i["hinta"]}',
+                "kirjattu tietokantaan": date.strftime("%Y/%m/%d, %H:%M"),
+            }
         list_of_prices.append(price_dict)
 
     return list_of_prices
